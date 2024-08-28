@@ -17,7 +17,6 @@ const Terminal = () => {
         foreground: "#fff",
       },
       fontFamily: "monospace",
-      fontSize: 18,
     });
 
     xterm.open(xtermRef.current!);
