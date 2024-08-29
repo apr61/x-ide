@@ -10,9 +10,9 @@ const Playground = () => {
   return (
     <main className="flex min-h-screen">
       <FileTree filetree={fileTree} onSelect={onSelect} />
-      <div className="flex flex-col w-full">
+      <div className="h-full">
         <CodeEditor />
-        <Terminal />
+        {/* <Terminal /> */}
       </div>
     </main>
   );

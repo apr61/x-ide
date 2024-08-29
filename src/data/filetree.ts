@@ -1,14 +1,14 @@
 import { FileTreeType } from "../types/api";
 
-export const fileTree : FileTreeType = {
-  "public": {
+export const fileTree: FileTreeType = {
+  public: {
     "favicon.ico": null,
   },
-  "src": {
-    "assets": {
+  src: {
+    assets: {
       "react.svg": null,
     },
-    "components": {
+    components: {
       "Header.jsx": null,
       "Footer.jsx": null,
     },

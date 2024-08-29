@@ -25,7 +25,7 @@
 }
 
 body{
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 @media (prefers-color-scheme: light) {
@@ -33,4 +33,25 @@ body{
     color: #213547;
     background-color: #ffffff;
   }
+}
+
+
+.playground_layout{
+  display: grid;
+  grid-template-areas: "file_tree code_editor"
+             "file_tree code_editor"
+             "file_tree  terminal";
+  grid-template-columns: 20rem 1fr;
+}
+
+.file_tree{
+  grid-area: file_tree;
+}
+
+.code_editor{
+  grid-area: code_editor;
+}
+
+.terminal{
+  grid-area: terminal;
 }

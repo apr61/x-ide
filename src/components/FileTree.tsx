@@ -6,30 +6,41 @@ import {
   FolderAddOutlined,
   FolderOpenOutlined,
   FolderOutlined,
-  ReloadOutlined,
 } from "@ant-design/icons";
+import { usePlayground } from "../hooks/usePlayground";
 
 type DirectoryProps = {
   name: String;
+  path: String;
 } & PropsWithChildren;
 
-const Directory = ({ name, children }: DirectoryProps) => {
+const Directory = ({ name, children, path }: DirectoryProps) => {
   const [isOpen, setIsopen] = useState(false);
+  const { selectedFile, setSelectedFile } = usePlayground();
 
   const handleOnClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
     setIsopen((prev) => !prev);
+    setSelectedFile(path);
   };
 
   return (
-    <div className="my-1">
+    <div className="my-1 relative">
       <p
         onClick={(e) => handleOnClick(e)}
-        className="cursor-pointer flex gap-2 items-center hover:bg-gray-700 p-1"
+        className={`cursor-pointer flex gap-2 items-center hover:bg-gray-700 p-1 ${
+          selectedFile === path ? "bg-gray-600" : ""
+        }`}
       >
         {isOpen ? <FolderOpenOutlined /> : <FolderOutlined />}
         <span>{name}</span>
       </p>
+      {isOpen && (
+        <button
+          className="absolute top-9 left-2 w-[2px] h-[calc(100%-2.5rem)] bg-gray-500"
+          onClick={() => setIsopen((prev) => !prev)}
+        ></button>
+      )}
       {isOpen && children}
     </div>
   );
@@ -48,15 +59,30 @@ const BuildFileTree = ({
   filePath,
   onSelect,
 }: BuildFileTreeProps) => {
+  const { selectedFile, setSelectedFile } = usePlayground();
   const isDir = !!nodes;
 
+  const handleOnClick = () => {
+    onSelect(filePath);
+    setSelectedFile(filePath);
+  };
+
   return (
-    <div className="ml-2">
+    <div className="ml-4">
       {isDir ? (
-        <Directory name={fileName}>
+        <Directory name={fileName} path={filePath}>
+          {/* <div className="my-1 ml-4 max-w-full flex gap-2 items-center">
+            <FolderOutlined />
+            <input
+              type="text"
+              className="w-full bg-transparent focus-visible:outline-none border border-gray-700"
+              autoFocus
+            />
+          </div> */}
+					
           <ul>
             {Object.keys(nodes).map((child) => (
-              <li key={child}>
+              <li key={child} className="my-[2px]">
                 <BuildFileTree
                   nodes={nodes[child]}
                   fileName={child}
@@ -69,8 +95,10 @@ const BuildFileTree = ({
         </Directory>
       ) : (
         <p
-          className="cursor-pointer flex gap-2 hover:bg-gray-700 p-1"
-          onClick={() => onSelect(filePath)}
+          className={`cursor-pointer flex gap-2 hover:bg-gray-700 p-1 ${
+            selectedFile === filePath ? "bg-gray-600" : ""
+          }`}
+          onClick={handleOnClick}
         >
           <FileOutlined />
           <span>{fileName}</span>
@@ -87,18 +115,15 @@ type FileTreeProps = {
 
 const FileTree = ({ filetree, onSelect }: FileTreeProps) => {
   return (
-    <aside className="border-r border-red-400 max-w-xs w-full p-1">
+    <aside className="border-r border-red-400 max-w-xs w-full p-2">
       <div className="p-2 flex justify-between">
         <p className="text-lg">Files</p>
         <div className="flex gap-2">
           <button>
             <FileAddOutlined />
           </button>
-          <button className="text-lg">
-            <FolderAddOutlined />
-          </button>
           <button>
-            <ReloadOutlined />
+            <FolderAddOutlined />
           </button>
         </div>
       </div>
